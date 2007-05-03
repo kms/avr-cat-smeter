@@ -2,11 +2,10 @@
 #define F_CPU 4000000
 
 #include <avr/io.h>
-#include <avr/signal.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
-#include <avr/delay.h>
+#include <util/delay.h>
 #include <stdlib.h>
 
 void displayTest(void);
@@ -82,8 +81,6 @@ void uartTx(uint8_t a[], uint8_t len) {
 }
 
 SIGNAL(SIG_OUTPUT_COMPARE2A) {
-    wdt_reset();
-
     // Step down timer2 prescaler
     TCCR2B |= _BV(CS22) | _BV(CS21) | _BV(CS20);
     // Divide clock by 2
@@ -96,14 +93,14 @@ SIGNAL(SIG_OUTPUT_COMPARE2A) {
     // Enable TX & RX
     UCSR0B |= _BV(RXEN0) | _BV(TXEN0);
 
-    // 8-bit, 2 stop-bits, 0 start-bits, no parity, 38.400kbps
+    // 8-bit, 2 stop-bits, no parity, 38.400kbps
     UCSR0C |= _BV(USBS0) | _BV(UCSZ01) | _BV(UCSZ00);
     UCSR0A |= _BV(U2X0);
     UBRR0L |= 12;
 
     // Empty RX FIFO
     while (UCSR0A & _BV(RXC0)) {
-	uint8_t c = UDR0;
+	UDR0;
     }
 
     // TX for signal level
@@ -137,4 +134,6 @@ SIGNAL(SIG_OUTPUT_COMPARE2A) {
     CLKPR = _BV(CLKPS3);
     // Step up timer2 prescaler
     TCCR2B &= ~(_BV(CS20) | _BV(CS22));
+
+    wdt_reset();
 }
