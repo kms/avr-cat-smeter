@@ -53,7 +53,7 @@ int main(void) {
     sei();
 
     for (;;) {
-	sleep_mode();
+        sleep_mode();
     }
 
     return 0;
@@ -75,10 +75,10 @@ void uartTx(uint8_t a[], uint8_t len) {
 
     // TX contents of array
     for (i = 0; i < len; i++) {
-	while (!(UCSR0A & _BV(UDRE0))) {
-	}
+        while (!(UCSR0A & _BV(UDRE0))) {
+        }
 
-	UDR0 = a[i];
+        UDR0 = a[i];
     }
 
     // Spin until all data is sent
@@ -106,7 +106,7 @@ SIGNAL(SIG_OUTPUT_COMPARE2A) {
 
     // Empty RX FIFO
     while (UCSR0A & _BV(RXC0)) {
-	UDR0;
+        UDR0;
     }
 
     // TX for signal level
@@ -119,18 +119,18 @@ SIGNAL(SIG_OUTPUT_COMPARE2A) {
 
     // RX data and set PWM duty-cycle according to signal level
     if (UCSR0A & _BV(RXC0)) {
-	static uint8_t values[] = {
-	    0, 15, 30, 45, 
-	    60, 75, 90, 105, 
-	    120, 135, 150, 165,
-	    180, 195, 210, 225
-	};
+        static uint8_t values[] = {
+            0, 15, 30, 45, 
+            60, 75, 90, 105, 
+            120, 135, 150, 165,
+            180, 195, 210, 225
+        };
 
-	uint8_t c = UDR0 & 0x0f;
+        uint8_t c = UDR0 & 0x0f;
 
-	OCR0A = values[c];
+        OCR0A = values[c];
     } else {
-	OCR0A = 0;
+        OCR0A = 0;
     }
 
     // Disable UART0
