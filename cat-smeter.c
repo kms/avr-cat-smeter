@@ -1,7 +1,7 @@
 /* avr-cat-smeter
  * Displays Yaesu signal meter level on an analogue meter. 
  *
- * (c) Karl-Martin Skontorp <kms@skontorp.net> ~ http://picofarad.org/
+ * (c) Karl-Martin Skontorp <kms@skontorp.net> ~ http://22pf.org/
  * Licensed under the GNU GPL 2.0 or later.
  */
 
